@@ -1,12 +1,8 @@
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
-const { SEKRET_KEY } = require('../constants');
 const NotFoundError = require('../errors/not-found-err');
 const BadRequestError = require('../errors/bad-request-err');
-const BadAuthError = require('../errors/bad-auth-err');
-const ExistEmailError = require('../errors/exist-email-err');
 
 module.exports.getUsers = (req, res, next) => {
   User.find({})
@@ -53,7 +49,7 @@ module.exports.createUser = (req, res, next) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError('Переданы некорректные данные при создании пользователя.'));
       } else if (err.code === 11000) {
-        next(new ExistEmailError('Передан уже зарегистрированный email.'));
+        next();
       } else {
         next(err);
       }
@@ -101,19 +97,6 @@ module.exports.updateUserAvatar = (req, res, next) => {
       } else {
         next(err);
       }
-    });
-};
-
-module.exports.login = (req, res, next) => {
-  const { email, password } = req.body;
-
-  return User.findUserByCredentials(email, password)
-    .then((user) => {
-      const token = jwt.sign({ _id: user._id }, SEKRET_KEY, { expiresIn: '7d' });
-      res.send({ token });
-    })
-    .catch(() => {
-      next(new BadAuthError('Неправильные почта или пароль.'));
     });
 };
 
