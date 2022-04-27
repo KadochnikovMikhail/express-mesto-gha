@@ -1,4 +1,4 @@
-const bcrypt = require('bcryptjs');
+
 const User = require('../models/user');
 
 const NotFoundError = require('../errors/not-found-err');
@@ -13,11 +13,7 @@ module.exports.getUsers = (req, res, next) => {
 module.exports.getUserById = (req, res, next) => {
   User.findById(req.params.userId)
     .then((user) => {
-      if (!user) {
-        throw new NotFoundError('Пользователь по указанному _id не найден.');
-      } else {
-        res.send({ user });
-      }
+      res.status(200).send({ user });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -30,26 +26,20 @@ module.exports.getUserById = (req, res, next) => {
 
 module.exports.createUser = (req, res, next) => {
   const {
-    name, about, avatar, password, email,
+    name, about, avatar
   } = req.body;
 
-  if (!email || !password) {
-    next(new BadRequestError('Поля email и password обязательны.'));
-  }
-  bcrypt.hash(password, 10)
-    .then((hash) => User.create({
-      name, about, avatar, password: hash, email,
-    }))
+  User.create({
+      name, about, avatar
+    })
     .then((user) => {
       res.status(200).send({
-        name: user.name, about: user.about, avatar: user.avatar, _id: user._id, email: user.email,
+        name: user.name, about: user.about, avatar: user.avatar, _id: user._id
       });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError('Переданы некорректные данные при создании пользователя.'));
-      } else if (err.code === 11000) {
-        next();
       } else {
         next(err);
       }
@@ -100,20 +90,3 @@ module.exports.updateUserAvatar = (req, res, next) => {
     });
 };
 
-module.exports.getCurrentUsers = (req, res, next) => {
-  User.findById(req.user._id)
-    .then((user) => {
-      if (!user) {
-        next(new NotFoundError('Пользователь по указанному _id не найден.'));
-      } else {
-        res.send({ user });
-      }
-    })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        next(new NotFoundError('Передан некорректный _id пользователя.'));
-      } else {
-        next(err);
-      }
-    });
-};
