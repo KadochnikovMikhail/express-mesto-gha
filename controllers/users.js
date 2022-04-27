@@ -1,6 +1,4 @@
-
 const User = require('../models/user');
-
 const NotFoundError = require('../errors/not-found-err');
 const BadRequestError = require('../errors/bad-request-err');
 
@@ -26,15 +24,15 @@ module.exports.getUserById = (req, res, next) => {
 
 module.exports.createUser = (req, res, next) => {
   const {
-    name, about, avatar
+    name, about, avatar,
   } = req.body;
 
   User.create({
-      name, about, avatar
-    })
+    name, about, avatar,
+  })
     .then((user) => {
       res.status(200).send({
-        name: user.name, about: user.about, avatar: user.avatar, _id: user._id
+        name: user.name, about: user.about, avatar: user.avatar, _id: user._id,
       });
     })
     .catch((err) => {
@@ -89,4 +87,3 @@ module.exports.updateUserAvatar = (req, res, next) => {
       }
     });
 };
-

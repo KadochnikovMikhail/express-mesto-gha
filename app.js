@@ -19,7 +19,7 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   if (err) throw err;
 });
 
-app.post('/signup',  (req, res) => {
+app.post('/signup', (req, res) => {
   res.send(req.params);
 });
 app.post('/signup', createUser);
