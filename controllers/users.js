@@ -7,7 +7,7 @@ module.exports.getUsers = (req, res) => {
     .catch((err) => res.status(500).send({ data: err.message }));
 };
 
-module.exports.getUsersById = (req, res) => {
+module.exports.getUserById = (req, res) => {
   if (mongoose.Types.ObjectId.isValid(req.params.userId)) {
     User.findById(req.params.userId)
       .then((user) => {
