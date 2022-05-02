@@ -32,9 +32,9 @@ module.exports.createUser = (req, res) => {
     .then((user) => res.status(200).send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400);
+        res.status(400).send({ message: `Возникла ошибка ${err.message}` });
       } else {
-        res.status(500);
+        res.status(500).send({ message: `Возникла ошибка ${err.message}` });
       }
       res.send({ data: err.message });
     });
@@ -54,9 +54,9 @@ module.exports.updateUser = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400);
+        res.status(400).send({ message: `Возникла ошибка ${err.message}` });
       } else {
-        res.status(500);
+        res.status(500).send({ message: `Возникла ошибка ${err.message}` });
       }
       res.send({ data: err.message });
     });
@@ -75,9 +75,9 @@ module.exports.updateUserAvatar = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400);
+        res.status(400).send({ message: `Возникла ошибка ${err.message}` });
       } else {
-        res.status(500);
+        res.status(500).send({ message: `Возникла ошибка ${err.message}` });
       }
       res.send({ data: err.message });
     });
