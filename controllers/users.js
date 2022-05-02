@@ -12,7 +12,7 @@ module.exports.getUserById = (req, res) => {
     User.findById(req.params.userId)
       .then((user) => {
         if (user == null) {
-          res.status(404).send({ data: 'Пользователь с данным Id не найден' });
+          res.status(404).send({ message: 'Пользователь с данным Id не найден' });
         } else {
           res.status(200).send({ data: user });
         }
@@ -21,7 +21,7 @@ module.exports.getUserById = (req, res) => {
         res.status(500).send({ data: err.message });
       });
   } else {
-    res.status(400).send({ data: 'Введен некорректный id' });
+    res.status(400).send({ message: 'Введен некорректный id' });
   }
 };
 
