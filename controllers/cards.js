@@ -19,7 +19,7 @@ module.exports.deleteCard = (req, res) => {
       })
       .catch((err) => res.status(500).send({ data: err.message }));
   } else {
-    res.status(400).send({ data: 'Введен некорректный id карточки' });
+    res.status(400).send({ message: 'Введен некорректный id карточки' });
   }
 };
 
@@ -53,7 +53,7 @@ module.exports.likeCard = (req, res) => {
       })
       .catch((err) => res.status(500).send({ message: `Возникла ошибка ${err.message}` }));
   } else {
-    res.status(400).send({ data: 'Введен некорректный id карточки' });
+    res.status(400).send({ message: 'Введен некорректный id карточки' });
   }
 };
 
@@ -73,6 +73,6 @@ module.exports.dislikeCard = (req, res) => {
       })
       .catch((err) => res.status(500).send({ message: `Возникла ошибка ${err.message}` }));
   } else {
-    res.status(400).send({ data: 'Введен некорректный id карточки' });
+    res.status(400).send({ message: 'Введен некорректный id карточки' });
   }
 };
