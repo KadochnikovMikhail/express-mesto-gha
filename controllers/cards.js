@@ -48,7 +48,7 @@ module.exports.likeCard = (req, res) => {
         res.status(200).send({ data: card });
       }
     })
-    .catch((err) => res.status(500).send({ message: `Возникла ошибка ${err.message}` }));
+    .catch(() => res.status(400).send({ data: 'Введен некорректный id карточки' }));
 };
 
 module.exports.dislikeCard = (req, res) => {
