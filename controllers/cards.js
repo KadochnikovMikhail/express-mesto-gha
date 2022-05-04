@@ -41,18 +41,18 @@ module.exports.likeCard = (req, res) => {
   if (mongoose.Types.ObjectId.isValid(req.params.cardId)) {
     Card.findByIdAndUpdate(
       req.params.cardId,
-      {$addToSet: {likes: req.user._id}},
-      {new: true},
+      { $addToSet: { likes: req.user._id } },
+      { new: true },
     )
       .then((card) => {
         if (card == null) {
-          res.status(404).send({data: 'Карточка с данным Id не найдена'});
+          res.status(404).send({ data: 'Карточка с данным Id не найдена' });
         } else {
-          res.status(200).send({data: card});
+          res.status(200).send({ data: card });
         }
       })
-      .catch((err) => res.status(500).send({message: `Возникла ошибка ${err.message}`}));
-  }else {
+      .catch((err) => res.status(500).send({ message: `Возникла ошибка ${err.message}` }));
+  } else {
     res.status(400).send({ data: 'Введен некорректный id карточки' });
   }
 };
@@ -61,18 +61,18 @@ module.exports.dislikeCard = (req, res) => {
   if (mongoose.Types.ObjectId.isValid(req.params.cardId)) {
     Card.findByIdAndUpdate(
       req.params.cardId,
-      {$pull: {likes: req.user._id}},
-      {new: true},
+      { $pull: { likes: req.user._id } },
+      { new: true },
     )
       .then((card) => {
         if (card == null) {
-          res.status(404).send({data: 'Карточка с данным Id не найдена'});
+          res.status(404).send({ data: 'Карточка с данным Id не найдена' });
         } else {
-          res.status(200).send({data: card});
+          res.status(200).send({ data: card });
         }
       })
-      .catch((err) => res.status(500).send({message: `Возникла ошибка ${err.message}`}));
-  }else {
+      .catch((err) => res.status(500).send({ message: `Возникла ошибка ${err.message}` }));
+  } else {
     res.status(400).send({ data: 'Введен некорректный id карточки' });
   }
 };
