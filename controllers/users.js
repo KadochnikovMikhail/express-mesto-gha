@@ -38,7 +38,6 @@ module.exports.createUser = (req, res) => {
       } else {
         res.status(500).send({ message: `Возникла ошибка ${err.message}` });
       }
-      res.send({ data: err.message });
     });
 };
 
@@ -60,7 +59,6 @@ module.exports.updateUser = (req, res) => {
       } else {
         res.status(500).send({ message: `Возникла ошибка ${err.message}` });
       }
-      res.send({ data: err.message });
     });
 };
 
@@ -81,6 +79,5 @@ module.exports.updateUserAvatar = (req, res) => {
       } else {
         res.status(500).send({ message: `Возникла ошибка ${err.message}` });
       }
-      res.send({ data: err.message });
     });
 };

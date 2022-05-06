@@ -33,7 +33,6 @@ module.exports.createCard = (req, res) => {
       } else {
         res.status(500).send({ message: `Возникла ошибка ${err.message}` });
       }
-      res.send({ data: err.message });
     });
 };
 
