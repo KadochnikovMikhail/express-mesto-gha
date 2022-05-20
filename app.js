@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -12,6 +13,17 @@ const {
 } = require('./controllers/users');
 const NotFoundError = require('./errors/not-found-err');
 
+const { requestLogger, errorLogger } = require('./middlewares/logger');
+
+const allowedCors = [
+  'https://mesto.firstproject.nomoredomains.xyz/',
+  'http://mesto.firstproject.nomoredomains.xyz/',
+  'https://localhost:3000',
+  'http://localhost:3000',
+];
+
+console.log(process.env.NODE_ENV);
+
 const { PORT = 3000 } = process.env;
 const app = express();
 
@@ -24,6 +36,28 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true, useUnifiedTopology: true,
 }, (err) => {
   if (err) throw err;
+});
+
+app.use(requestLogger);
+
+app.use((req, res, next) => {
+  const { origin } = req.headers;
+  if (allowedCors.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
+  next();
+});
+
+app.use((req, res, next) => {
+  const { method } = req;
+  const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
+  const requestHeaders = req.headers['access-control-request-headers'];
+  if (method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
+    res.header('Access-Control-Allow-Headers', requestHeaders);
+    return res.end();
+  }
+  return next();
 });
 
 app.post('/signin', celebrate({
@@ -66,6 +100,8 @@ app.use('/cards', require('./routes/cards'));
 app.use('/', (req, res, next) => {
   next(new NotFoundError('Неправильный путь.'));
 });
+
+app.use(errorLogger);
 
 app.use(errors());
 
