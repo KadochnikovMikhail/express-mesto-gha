@@ -18,6 +18,8 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const allowedCors = [
   'https://mesto.firstproject.nomoredomains.xyz',
   'http://mesto.firstproject.nomoredomains.xyz',
+  'https://api.mesto.firstproject.nomoredomains.xyz',
+  'http://api.mesto.firstproject.nomoredomains.xyz',
   'https://localhost:3000',
   'http://localhost:3000',
 ];
