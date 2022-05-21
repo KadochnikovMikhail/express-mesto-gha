@@ -1,4 +1,5 @@
 require('dotenv').config();
+const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -15,17 +16,20 @@ const NotFoundError = require('./errors/not-found-err');
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-const allowedCors = [
-  'https://mesto.firstproject.nomoredomains.xyz',
-  'http://mesto.firstproject.nomoredomains.xyz',
-  'https://localhost:3000',
-  'http://localhost:3000',
-];
-
 console.log(process.env.NODE_ENV);
 
 const { PORT = 3000 } = process.env;
 const app = express();
+
+app.use(cors({
+  origin: [
+    'https://mesto.firstproject.nomoredomains.xyz',
+    'http://mesto.firstproject.nomoredomains.xyz',
+    'https://localhost:3000',
+    'http://localhost:3000',
+  ],
+  credentials: true,
+}));
 
 app.use(helmet());
 
@@ -40,25 +44,29 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 
 app.use(requestLogger);
 
-app.use((req, res, next) => {
-  const { origin } = req.headers;
-  if (allowedCors.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', origin);
-  }
-  next();
-});
+// app.use((req, res, next) => {
+//
+//   const { origin } = req.headers;
+//   console.log(origin)
+//   if (allowedCors.includes(origin)) {
+//     res.header('Access-Control-Allow-Origin', origin);
+//   }
+//   next();
+// });
+//
+// app.use((req, res, next) => {
+//   const { method } = req;
+//   const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
+//   const requestHeaders = req.headers['access-control-request-headers'];
+//   if (method === 'OPTIONS') {
+//     res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
+//     res.header('Access-Control-Allow-Headers', requestHeaders);
+//     return res.end();
+//   }
+//   return next();
+// });
 
-app.use((req, res, next) => {
-  const { method } = req;
-  const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
-  const requestHeaders = req.headers['access-control-request-headers'];
-  if (method === 'OPTIONS') {
-    res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
-    res.header('Access-Control-Allow-Headers', requestHeaders);
-    return res.end();
-  }
-  return next();
-});
+
 
 app.post('/signin', celebrate({
   body: Joi.object().keys({
