@@ -41,14 +41,14 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 });
 
 app.use(requestLogger);
-app.use((req, res, next) => {
 
+app.use((req, res, next) => {
   const { origin } = req.headers;
-  console.log({ origin })
+
   if (allowedCors.includes(origin)) {
-    console.log(origin);
     res.header('Access-Control-Allow-Origin', origin);
   }
+
   next();
 });
 
