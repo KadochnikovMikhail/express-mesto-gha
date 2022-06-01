@@ -5,7 +5,7 @@ const DelCardError = require('../errors/del-card-err');
 
 module.exports.getCards = (req, res, next) => {
   Card.find({})
-    .then((cards) => res.send({ cards }))
+    .then((cards) => res.send( cards ))
     .catch(next);
 };
 
